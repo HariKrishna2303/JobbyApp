@@ -5,7 +5,7 @@ import Header from '../Header'
 
 class Jobs extends Component {
   render() {
-    const {salaryRangesList, employmentTypesList} = this.props
+    const {salaryRangesList, employmentTypesList, locations} = this.props
 
     return (
       <div className="Job-container">
@@ -15,6 +15,7 @@ class Jobs extends Component {
             salaryRangesList={salaryRangesList}
             employmentTypesList={employmentTypesList}
             renderProfileDetail={this.renderProfileDetails}
+            locations={locations}
           />
         </div>
       </div>

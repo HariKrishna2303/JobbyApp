@@ -21,6 +21,7 @@ class JobItemDetailsCards extends Component {
     searchInput: '',
     checkedBoxes: [],
     salaryFilter: '',
+    checked: [],
   }
 
   componentDidMount() {
@@ -43,15 +44,16 @@ class JobItemDetailsCards extends Component {
       apiStatus: apiStatusConstants.inProgress,
     })
     const jwtToken = Cookies.get('jwt_token')
-    const {searchInput, checkedBoxes, salaryFilter} = this.state
+    const {searchInput, checkedBoxes, salaryFilter, checked} = this.state
     const text = checkedBoxes.join()
+    const local = checked.join()
     const options = {
       headers: {
         Authorization: `Bearer ${jwtToken}`,
       },
       method: 'GET',
     }
-    const apiUrl = `https://apis.ccbp.in/jobs?employment_type=${text}&minimum_package=${salaryFilter}&search=${searchInput}`
+    const apiUrl = `https://apis.ccbp.in/jobs?employment_type=${text}&location=${local}&minimum_package=${salaryFilter}&search=${searchInput}`
     console.log(apiUrl)
     const response = await fetch(apiUrl, options)
     if (response.ok === true) {
@@ -165,6 +167,15 @@ class JobItemDetailsCards extends Component {
     )
   }
 
+  updateboxes = id => {
+    this.setState(
+      prev => ({
+        checked: [...prev.checked, id],
+      }),
+      this.getJobItemDetails,
+    )
+  }
+
   updateSalary = id => {
     this.setState(
       {
@@ -176,7 +187,7 @@ class JobItemDetailsCards extends Component {
 
   render() {
     const {searchInput} = this.state
-    const {salaryRangesList, employmentTypesList} = this.props
+    const {salaryRangesList, employmentTypesList, locations} = this.props
     return (
       <div className="job-card">
         <div className="side-bar">
@@ -186,6 +197,8 @@ class JobItemDetailsCards extends Component {
             salaryRangesList={salaryRangesList}
             employmentTypesList={employmentTypesList}
             selectedCheckBox={this.updateCheckboxes}
+            selectedBox={this.updateboxes}
+            locations={locations}
             updateSalary={this.updateSalary}
           />
         </div>
